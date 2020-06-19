@@ -19,7 +19,7 @@ exec(open('./config.py').read())
 CHECK_FREQ = 2  # check every 2 seconds
 PID_FILE = '/tmp/motorswitch.pid'
 HTTP_PORT = 8989
-IFTTT_ERROR_URL = 'http://maker.ifttt.com/trigger/motor_switch_error/with/key/' + Config.IFTTT_KEY
+IFTTT_ERROR_URL = 'http://maker.ifttt.com/trigger/motor_switch_error/with/key/' + Config.IFTTT_KEY  # noqa: F821
 SIGNALON_URL = 'http://motorswitch.lan/signalon'
 SIGNALOFF_URL = 'http://motorswitch.lan/signaloff'
 DEVICE_INDEX = 0
@@ -32,7 +32,7 @@ for i in range(10):
     print('Requesting authorization...')
     auth = devices[DEVICE_INDEX].auth()
     print('Authorization status: ', auth)
-    if (auth == True):
+    if (auth is True):
         break
 if auth is not True:
     last_error = 'Unable to get device auth!'
@@ -98,8 +98,8 @@ def check():
         error_notified = False
     while True:
         state_now = devices[0].check_power()
-        if state_now == True or state_now == False:
-            if state_now == True and state_prev != True:
+        if state_now is True or state_now is False:
+            if state_now is True and state_prev is not True:
                 try:
                     r = requests.get(SIGNALON_URL)
                     r.raise_for_status()
@@ -112,7 +112,7 @@ def check():
                     state_prev = state_now
                     error_count = 0
                     error_notified = False
-            if state_now == False and state_prev != False:
+            if state_now is False and state_prev is not False:
                 try:
                     r = requests.get(SIGNALOFF_URL)
                     r.raise_for_status()
@@ -129,7 +129,7 @@ def check():
             last_error = 'something went wrong. state_now = ' + str(state_now)
             error_count += 1
             print('Error: ', last_error)
-        if error_count > 10 and error_notified == False:
+        if error_count > 10 and error_notified is False:
             print(requests.get(IFTTT_ERROR_URL + '?value1=Error:+' + str(last_error).replace(' ', '+').replace('\n', '+')).text)
             error_notified = True
         time.sleep(CHECK_FREQ)
