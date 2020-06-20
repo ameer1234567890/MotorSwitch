@@ -5,6 +5,7 @@
 import os
 import time
 import requests
+import tempfile
 import broadlink
 import multiprocessing
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -12,20 +13,19 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 """
 Write below to config.py replacing YOUR_IFTTT_KEY_HERE as required
 class Config:
-   IFTTT_KEY = "YOUR_IFTTT_KEY_HERE"
+    IFTTT_KEY = "YOUR_IFTTT_KEY_HERE"
 """
 exec(open('./config.py').read())
 
 CHECK_FREQ = 2  # check every 2 seconds
-PID_FILE = '/tmp/motorswitch.pid'
+PID_FILE = tempfile.gettempdir() + '/motorswitch.pid'
 HTTP_PORT = 8989
 IFTTT_ERROR_URL = 'http://maker.ifttt.com/trigger/motor_switch_error/with/key/' + Config.IFTTT_KEY  # noqa: F821
 SIGNALON_URL = 'http://motorswitch.lan/signalon'
 SIGNALOFF_URL = 'http://motorswitch.lan/signaloff'
 DEVICE_INDEX = 0
 
-
-for i in range(10):
+for _i in range(10):
     print('Discovering devices...')
     devices = broadlink.discover(timeout=5)
     print('Discovered devices: ', devices)
