@@ -23,7 +23,7 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 service_file=$(cat <<END_HEREDOC
 [Unit]
-Description=Custom service
+Description=MotorSwitch
 After=network.target
 [Service]
 Environment=VIRTUAL_ENV=$script_dir/env
